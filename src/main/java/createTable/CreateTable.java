@@ -24,11 +24,11 @@ public class CreateTable {
         }
         return con;
     }
-    private static final String createTableSQL = "CREATE TABLE categories " +
+    private  final String createTableSQL = "CREATE TABLE categories " +
             "(ID INT PRIMARY KEY ," +
             " NAME VARCHAR(50))";
 
-    private static final String createTableNewsSQL =  "CREATE TABLE news " +
+    private  final String createTableNewsSQL =  "CREATE TABLE news " +
             "(ID INT PRIMARY KEY," +
             " TITLE VARCHAR(50) NOT NULL, " +
             " DESCRIPTION TEXT NOT NULL, " +
@@ -56,4 +56,6 @@ public class CreateTable {
             System.out.println(ex.getMessage());
         }
     }
+
+
 }
