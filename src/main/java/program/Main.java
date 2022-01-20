@@ -17,9 +17,8 @@ public class Main {
         CreateTable createTable = new CreateTable();
         InsertData insert = new InsertData();
         DeleteData del = new DeleteData();
-        //del.deleteItem();
-       boolean d = del.isExistItem();
-        System.out.println("Main :"+ d);
+        del.deleteItem(108);
+
         //Faker javafaker =  Faker.instance(new Locale("uk-UA"));
         // Locale lo = new Locale("uk","UA");
         // System.out.println(lo);

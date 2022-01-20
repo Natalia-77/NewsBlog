@@ -12,13 +12,14 @@ public class DeleteData {
     private final String deleteDataSQL = " DELETE FROM news WHERE id = ?;";
     private final String selectItemSQL = " SELECT id,title,description,author,category_id FROM news WHERE id = ?;";
 
-    public boolean isExistItem() {
+    public boolean isExistItem(int num) {
+
         boolean existItem = false;
-        News news = new News();
+
         try (Connection connection = DriverManager.getConnection(url, user, password);
              PreparedStatement preparedStatement = connection.prepareStatement(selectItemSQL);) {
 
-            preparedStatement.setInt(1, 10550);
+            preparedStatement.setInt(1, num);
             ResultSet res = preparedStatement.executeQuery();
 
             while (res.next()) {
@@ -28,12 +29,7 @@ public class DeleteData {
                 String author = res.getString("author");
                 int categoryId = res.getInt("category_id");
                 System.out.println("Result :" + id + " Title: " + title + " Author: " + author + "Category id : " + categoryId);
-                news.setId(id);
-                news.setTitle(title);
-                news.setDescription(description);
-                news.setAuthor(author);
-                news.setCategoryId(categoryId);
-                System.out.println("Return : " +news.getTitle());
+
                 existItem = true;
             }
 
@@ -44,13 +40,17 @@ public class DeleteData {
         return existItem;
     }
 
-    public void deleteItem() {
+    public void deleteItem(int idDel) {
         try (Connection connection = DriverManager.getConnection(url, user, password);
              PreparedStatement preparedStatement = connection.prepareStatement(deleteDataSQL);) {
-
-            preparedStatement.setInt(1, 106);
-            int resultDelete = preparedStatement.executeUpdate();
-            System.out.println("You deleted " + resultDelete + " rows");
+            if(isExistItem(idDel)){
+                preparedStatement.setInt(1, idDel);
+                int resultDelete = preparedStatement.executeUpdate();
+                System.out.println("You deleted " + resultDelete + " rows");
+            }
+            else{
+                System.out.println("Doesn't exist item with "+ idDel + " id");
+            }
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
