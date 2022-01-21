@@ -5,14 +5,14 @@ import java.sql.*;
 import java.util.List;
 
 public class DeleteData {
-    private final String url = "jdbc:postgresql://91.238.103.41:5432/javaproduct";
-    private final String user = "javauser";
-    private final String password = "referencestart123456";
+    private static final String url = "jdbc:postgresql://91.238.103.41:5432/javaproduct";
+    private static final String user = "javauser";
+    private static final String password = "referencestart123456";
 
     private final String deleteDataSQL = " DELETE FROM news WHERE id = ?;";
-    private final String selectItemSQL = " SELECT id,title,description,author,category_id FROM news WHERE id = ?;";
+    private static final String selectItemSQL = " SELECT id,title,description,author,category_id FROM news WHERE id = ?;";
 
-    public boolean isExistItem(int num) {
+    public static boolean isExistItem(int num) {
 
         boolean existItem = false;
 
@@ -28,7 +28,7 @@ public class DeleteData {
                 String description = res.getString("description");
                 String author = res.getString("author");
                 int categoryId = res.getInt("category_id");
-                System.out.println("Result :" + id + " Title: " + title + " Author: " + author + "Category id : " + categoryId);
+                System.out.println("Result :" + id + " Title: " + title + " Author: " + author + " Category id : " + categoryId);
 
                 existItem = true;
             }

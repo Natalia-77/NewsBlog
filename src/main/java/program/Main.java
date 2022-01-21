@@ -3,9 +3,11 @@ package program;
 import com.github.javafaker.Faker;
 import createTable.CreateTable;
 import deleteTable.DeleteData;
+import helper.CheckValidData;
 import insertToTable.InsertData;
 import models.Categories;
 import models.News;
+import updateTable.UpdateData;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,7 +19,11 @@ public class Main {
         CreateTable createTable = new CreateTable();
         InsertData insert = new InsertData();
         DeleteData del = new DeleteData();
-        del.deleteItem(108);
+        UpdateData up = new UpdateData();
+        //up.updateItem(107);
+       // del.deleteItem(108);
+        int d = CheckValidData.checkInputData();
+        System.out.println("res: "+d);
 
         //Faker javafaker =  Faker.instance(new Locale("uk-UA"));
         // Locale lo = new Locale("uk","UA");
