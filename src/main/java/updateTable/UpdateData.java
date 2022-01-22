@@ -23,6 +23,7 @@ public class UpdateData {
     public void updateTitleItem(int idUpdate) {
         try (Connection connection = DriverManager.getConnection(url, user, password);
              PreparedStatement preparedStatement = connection.prepareStatement(updateTitle);) {
+            //перевірка,чи існує елемент з таким айді...
             if (isExistItem(idUpdate)) {
                 System.out.print("Enter new title: ");
                 in.nextLine();

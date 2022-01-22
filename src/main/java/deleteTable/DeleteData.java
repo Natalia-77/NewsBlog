@@ -12,6 +12,7 @@ public class DeleteData {
     private final String deleteDataSQL = " DELETE FROM news WHERE id = ?;";
     private static final String selectItemSQL = " SELECT id,title,description,author,category_id FROM news WHERE id = ?;";
 
+    //перевірка по айді,чи взагалі елемент з таким айді існує.
     public static boolean isExistItem(int num) {
 
         boolean existItem = false;
@@ -43,6 +44,7 @@ public class DeleteData {
     public void deleteItem(int idDel) {
         try (Connection connection = DriverManager.getConnection(url, user, password);
              PreparedStatement preparedStatement = connection.prepareStatement(deleteDataSQL);) {
+            //перевірка,чи існує елемент з таким айді...
             if(isExistItem(idDel)){
                 preparedStatement.setInt(1, idDel);
                 int resultDelete = preparedStatement.executeUpdate();

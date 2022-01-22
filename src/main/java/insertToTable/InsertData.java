@@ -2,12 +2,15 @@ package insertToTable;
 
 import com.github.javafaker.Faker;
 import models.Categories;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Scanner;
 
 public class InsertData {
+    public static Scanner scanner = new Scanner(System.in);
     private final String url = "jdbc:postgresql://91.238.103.41:5432/javaproduct";
     private final String user = "javauser";
     private final String password = "referencestart123456";
@@ -16,10 +19,13 @@ public class InsertData {
             " (id,name) VALUES " + "(?,?);";
     private final String insertFakerDataSQL = " INSERT INTO news " +
             " (id,title,description,author,category_id ) VALUES " + "(?,?,?,?,?);";
-
     private final String selectDataSQL = "SELECT * FROM news";
+    private final String selectDataCategory = "SELECT * FROM categories";
+    private final String insertData = " INSERT INTO news " +
+            "(id,title,description,author,category_id ) VALUES " + "(?,?,?,?,?);";
+    private final String selectMax = " SELECT id FROM news ORDER BY title DESC LIMIT 1";
 
-    //додавання одного елемента
+    //додавання одного елемента,застовувала для початкової ініціалізації однієї з таблиць.
     public void insertItemsCategory() {
         try (Connection connect = DriverManager.getConnection(url, user, password);
              PreparedStatement preparedStatement = connect.prepareStatement(insertDataSQL)) {
@@ -27,6 +33,64 @@ public class InsertData {
             preparedStatement.setString(2, "Політика");
             preparedStatement.executeUpdate();
         } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    //пошук останнього айді таблиці Новини.
+    public int maxId() {
+        int item = 0;
+        try (Connection connect = DriverManager.getConnection(url, user, password);
+             PreparedStatement preparedStatement = connect.prepareStatement(selectMax);) {
+            try (ResultSet result = preparedStatement.executeQuery();) {
+                while (result.next()) {
+                    item = result.getInt("id");
+                    //System.out.println(item);
+                }
+
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return item;
+    }
+
+    //додавання в базу в таблицю Новини введеними з консолі даними
+    public void insertNewsToTable() {
+        Faker faker = Faker.instance(new Locale("uk"));
+        try (Connection connect = DriverManager.getConnection(url, user, password);
+             PreparedStatement preparedStatement = connect.prepareStatement(insertData);) {
+            String title, description, author;
+            int id, category_id,index=0;
+            //список айді таблиці Категорії.Тут рандомом Фейкер буде генерити category_id.
+            List<Integer> listId = listCatId();
+            System.out.println(listId.size());
+            //перевірка,чи існують  дані в таблиці.якщо немає даних...
+            if (!isExistTable()) {
+                id = 1;
+            } else {//якщо дані є,то айді нового запису починається з наступного значення після максимального
+                int max = maxId();
+                id = ++max;
+            }
+            index = faker.random().nextInt(listId.size());
+            System.out.print("Enter title: ");
+            title = scanner.nextLine();
+            System.out.print("Enter description: ");
+            description = scanner.nextLine();
+            System.out.print("Enter author: ");
+            author = scanner.nextLine();
+            preparedStatement.setInt(1, 111);
+            preparedStatement.setString(2, title);
+            preparedStatement.setString(3, description);
+            preparedStatement.setString(4, author);
+            preparedStatement.setInt(5, listId.get(index));
+            preparedStatement.executeUpdate();
+
+
+        } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
     }
@@ -77,7 +141,7 @@ public class InsertData {
     public List<Integer> listCatId() {
         List<Integer> listId = new ArrayList<>();
         try (Connection connect = DriverManager.getConnection(url, user, password);
-             PreparedStatement preparedStatement = connect.prepareStatement(selectDataSQL);) {
+             PreparedStatement preparedStatement = connect.prepareStatement(selectDataCategory);) {
             try (ResultSet result = preparedStatement.executeQuery();) {
 
                 while (result.next()) {
@@ -122,7 +186,7 @@ public class InsertData {
                     }
                 }
             } else {
-                System.out.println("you cant add seeder!");
+                System.out.println("You cant add seeder!");
             }
 
         } catch (SQLException ex) {
