@@ -10,7 +10,6 @@ public class CheckValidData {
         int number = 0;
 
         do {
-            System.out.println("Enter id for search in database: ");
             while (!scanner.hasNextInt()) {
                 try {
                     scanner.next();
@@ -29,9 +28,8 @@ public class CheckValidData {
     public static String checkStrValid(){
        Scanner scanner = new Scanner(System.in);
         String str = " ";
-
         do{
-            System.out.println("Enter string: ");
+            //System.out.println("Enter string: ");
             str= scanner.nextLine();
                 try {
                     validateString(str);

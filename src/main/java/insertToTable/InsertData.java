@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
+import static helper.CheckValidData.checkStrValid;
+
 public class InsertData {
     public static Scanner scanner = new Scanner(System.in);
     private final String url = "jdbc:postgresql://91.238.103.41:5432/javaproduct";
@@ -23,7 +25,7 @@ public class InsertData {
     private final String selectDataCategory = "SELECT * FROM categories";
     private final String insertData = " INSERT INTO news " +
             "(id,title,description,author,category_id ) VALUES " + "(?,?,?,?,?);";
-    private final String selectMax = " SELECT id FROM news ORDER BY title DESC LIMIT 1";
+    private final String selectMax = " SELECT id FROM news ORDER BY id DESC LIMIT 1";
 
     //додавання одного елемента,застовувала для початкової ініціалізації однієї з таблиць.
     public void insertItemsCategory() {
@@ -45,7 +47,7 @@ public class InsertData {
             try (ResultSet result = preparedStatement.executeQuery();) {
                 while (result.next()) {
                     item = result.getInt("id");
-                    //System.out.println(item);
+                    System.out.println(item);
                 }
 
             } catch (SQLException ex) {
@@ -64,10 +66,9 @@ public class InsertData {
         try (Connection connect = DriverManager.getConnection(url, user, password);
              PreparedStatement preparedStatement = connect.prepareStatement(insertData);) {
             String title, description, author;
-            int id, category_id,index=0;
+            int id,index=0;
             //список айді таблиці Категорії.Тут рандомом Фейкер буде генерити category_id.
             List<Integer> listId = listCatId();
-            System.out.println(listId.size());
             //перевірка,чи існують  дані в таблиці.якщо немає даних...
             if (!isExistTable()) {
                 id = 1;
@@ -77,12 +78,12 @@ public class InsertData {
             }
             index = faker.random().nextInt(listId.size());
             System.out.print("Enter title: ");
-            title = scanner.nextLine();
+            title = checkStrValid();
             System.out.print("Enter description: ");
-            description = scanner.nextLine();
+            description = checkStrValid();
             System.out.print("Enter author: ");
-            author = scanner.nextLine();
-            preparedStatement.setInt(1, 111);
+            author = checkStrValid();
+            preparedStatement.setInt(1, id);
             preparedStatement.setString(2, title);
             preparedStatement.setString(3, description);
             preparedStatement.setString(4, author);

@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 import static deleteTable.DeleteData.isExistItem;
+import static helper.CheckValidData.checkStrValid;
 
 
 public class UpdateData {
@@ -26,8 +27,8 @@ public class UpdateData {
             //перевірка,чи існує елемент з таким айді...
             if (isExistItem(idUpdate)) {
                 System.out.print("Enter new title: ");
-                in.nextLine();
-                String title = in.nextLine();
+//                in.nextLine();
+                String title = checkStrValid();
                 preparedStatement.setString(1, title);
                 preparedStatement.setInt(2, idUpdate);
 
@@ -48,8 +49,8 @@ public class UpdateData {
              PreparedStatement preparedStatement = connection.prepareStatement(updateAuthor);) {
             if (isExistItem(idUpdate)) {
                 System.out.print("Enter new author: ");
-                in.nextLine();
-                String author = in.nextLine();
+                //in.nextLine();
+                String author = checkStrValid();
                 preparedStatement.setString(1, author);
                 preparedStatement.setInt(2, idUpdate);
 
